@@ -26,7 +26,7 @@ def print_results(results):
 
         print("-" * 40)
 
-
+# main
 def main():
 
     retriever = ChromaRetriever()
