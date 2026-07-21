@@ -6,60 +6,58 @@ def create_assessment_task(agent, retrieval_task):
     return Task(
 
         description="""
-You are assessing a new property objection.
+You are a senior valuation officer assessing a new property objection.
 
-Current objection:
+You have been given:
+
+1. The current objection.
+2. Historical objection cases retrieved from the Retrieval Agent.
+
+Current Objection
+
+-------------------------
 
 {objection}
 
-You have also been provided with historical objection cases retrieved
-from the Retrieval Agent.
+-------------------------
 
-Your job is to determine:
+Your objective is to determine the SINGLE most appropriate
+Primary Bucket for this objection.
 
-1. Complexity (1-10)
+You MUST choose ONE AND ONLY ONE of the following buckets:
 
-2. Urgency
-Choose one:
-- Y
-- N
+- Multi-Unit Lease / Apportionment
+- Comparable Evidence / PSF Benchmark
+- Actual / Net Rental Basis
+- Vacancy / Leasing Difficulty
+- Weak Market / Poor Location Conditions
+- Use Issues
+- Insufficient Text / Attachment-Dependent
+- Hardship / Compassion Appeal
+- Physical / Locational Disamenity
+- Invalid Objection
+- Owner Occupy
 
-3. Primary Bucket
+Instructions
 
-Choose the most appropriate business category.
-
-4. Recommendation
-
-Choose ONE recommendation from:
-
-- Auto approve
-- Refer to Valuer
-- Refer to Senior Valuer
-- Request more information
-- Site inspection required
-- Legal review required
-- Reject objection
-
-Your decision must be supported by the retrieved historical objections.
-
-Do NOT invent historical cases.
-
-Do NOT ignore the retrieved precedents.
-
-Explain your reasoning.
+- Carefully compare the objection with the retrieved historical cases.
+- Use the retrieved cases as supporting evidence.
+- Do not invent historical precedents.
+- Do not predict complexity.
+- Do not predict urgency.
+- Do not recommend any actions.
+- If multiple buckets appear relevant, choose the single best bucket.
+- Explain why you selected that bucket.
 """,
 
         expected_output="""
 Return your answer as JSON.
 
 {
-    "complexity": integer,
-    "urgency": "Y or N",
-    "primary_bucket": "...",
-    "recommendation": "...",
-    "reasoning": "...",
-    "supporting_cases": [
-        ...
+    "primary_bucket": "<one valid bucket>",
+    "reasoning": "<why this bucket was selected>",
+    "supporting_case_ids": [
+        "<case_ids>"
     ]
 }
 """,
@@ -67,4 +65,5 @@ Return your answer as JSON.
         agent=agent,
 
         context=[retrieval_task]
+
     )
