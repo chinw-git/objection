@@ -1,22 +1,31 @@
 from crewai import Task
-from agents.retrieval_agent import retrieval_agent
 
-retrieval_task = Task(
 
-    description="""
-Retrieve historical objections similar to:
+def create_retrieval_task(agent):
+
+    return Task(
+
+        description="""
+Retrieve historical objections similar to the following objection:
 
 {objection}
 
-Return the retrieved cases exactly as provided.
-Do not infer complexity.
-Do not infer urgency.
-Do not make recommendations.
+Instructions:
+
+- Use the Property Objection Retrieval Tool.
+- Retrieve the most relevant historical objection cases.
+- Return the retrieved cases exactly as provided.
+- Do not analyse the objection.
+- Do not infer the Primary Bucket.
+- Do not infer complexity.
+- Do not infer urgency.
+- Do not recommend any actions.
 """,
 
-    expected_output="""
-JSON containing retrieved historical cases.
+        expected_output="""
+A JSON object containing the retrieved historical objection cases returned by the retrieval tool.
 """,
 
-    agent=retrieval_agent
-)
+        agent=agent
+
+    )
