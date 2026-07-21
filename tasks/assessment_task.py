@@ -8,10 +8,10 @@ def create_assessment_task(agent, retrieval_task):
         description="""
 You are a senior valuation officer assessing a new property objection.
 
-You have been given:
+You have been provided with:
 
 1. The current objection.
-2. Historical objection cases retrieved from the Retrieval Agent.
+2. Historical objection cases retrieved by the Retrieval Agent.
 
 Current Objection
 
@@ -41,13 +41,14 @@ You MUST choose ONE AND ONLY ONE of the following buckets:
 Instructions
 
 - Carefully compare the objection with the retrieved historical cases.
-- Use the retrieved cases as supporting evidence.
+- Base your decision ONLY on the information provided.
 - Do not invent historical precedents.
 - Do not predict complexity.
 - Do not predict urgency.
 - Do not recommend any actions.
 - If multiple buckets appear relevant, choose the single best bucket.
-- Explain why you selected that bucket.
+- Clearly explain your reasoning.
+- Include EVERY retrieved historical case in your output so that reviewers can understand what evidence was available during your assessment.
 """,
 
         expected_output="""
@@ -55,9 +56,16 @@ Return your answer as JSON.
 
 {
     "primary_bucket": "<one valid bucket>",
-    "reasoning": "<why this bucket was selected>",
-    "supporting_case_ids": [
-        "<case_ids>"
+
+    "reasoning": "<clear explanation of why this bucket was selected>",
+
+    "supporting_cases": [
+        {
+            "grounds_of_objection": "<retrieved grounds of objection>",
+            "primary_bucket": "<retrieved case primary bucket>",
+            "complexity": "<retrieved complexity if available>",
+            "urgency": "<retrieved urgency if available>"
+        }
     ]
 }
 """,
