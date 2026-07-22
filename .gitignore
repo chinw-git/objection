@@ -1,4 +1,5 @@
 # Virtual environment
+CAPSTONE/.venv/
 .venv/
 
 # Environment variables
@@ -20,6 +21,10 @@ __pycache__/
 
 # Chroma vector database
 db/chroma/
+
+# Streamlit secrets
+CAPSTONE/.streamlit/secrets.toml
+.streamlit/secrets.toml
 
 # Logs
 *.log
