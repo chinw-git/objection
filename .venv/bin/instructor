@@ -1,8 +1,0 @@
-#!/bin/sh
-'''exec' "/Users/marklim/AI Bootcamp/capstone/.venv/bin/python" "$0" "$@"
-' '''
-import sys
-from instructor.cli.cli import app
-if __name__ == '__main__':
-    sys.argv[0] = sys.argv[0].removesuffix('.exe')
-    sys.exit(app())
