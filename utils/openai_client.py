@@ -12,11 +12,18 @@ def get_client(api_key):
     return client
 
 
-def stream_chat(messages, api_key):
+
+def stream_chat(messages, api_key, model):
+    """
+    Send the messages to OpenAI and return the streaming response.
+    """
+
     client = get_client(api_key)
 
-    return client.chat.completions.create(
-        model="gpt-4o-mini",
+    stream = client.chat.completions.create(
+        model=model,
         messages=messages,
         stream=True,
     )
+
+    return stream
