@@ -22,10 +22,38 @@ For each objection determine:
 
 5. Supporting Signals
 - Explain the evidence or keywords in the objection that support each decision.
+- Supporting signals must be an array of short strings
+
+Return ONLY one valid JSON object.
+
+Do not include:
+- markdown
+- code fences
+- explanations
+- headings
+- bullet points
+- any text before or after the JSON
+
+The JSON schema is:
+
+{
+  "primary_bucket": "",
+  "complexity_score": 4,
+  "urgency": "Y",
+  "recommended_course_of_action": "",
+  "supporting_signals": [
+    "",
+    ""
+  ]
+}
 
 Rules:
-- Use only the objection provided.
-- Do not assume facts not stated.
-- If information is insufficient, say so instead of guessing.
-- Keep the response concise and evidence-based.
+- primary_bucket must be a string.
+- complexity_score must be an integer between 1 and 11.
+- urgency must be either "Y" or "N".
+- recommended_course_of_action must be a short sentence.
+- supporting_signals must be an array of short strings.
+- Use only the information provided by the user.
+- If information is insufficient, explicitly state "Insufficient information".
+- Return valid JSON only.
 """
