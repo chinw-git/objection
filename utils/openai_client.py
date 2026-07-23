@@ -12,18 +12,28 @@ def get_client(api_key):
     return client
 
 
-
-def stream_chat(messages, api_key, model):
+def chat_completion(
+    messages,
+    api_key,
+    model,
+    temperature
+):
     """
-    Send the messages to OpenAI and return the streaming response.
+    Send the conversation to OpenAI and
+    return the assistant response as text.
     """
 
     client = get_client(api_key)
 
-    stream = client.chat.completions.create(
+    response = client.chat.completions.create(
         model=model,
         messages=messages,
-        stream=True,
+        temperature=temperature,
+        response_format={"type": "json_object"}
     )
 
-    return stream
+    print("========== OpenAI Response ==========")
+    print(response)
+    print("=====================================")
+
+    return response.choices[0].message.content
