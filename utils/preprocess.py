@@ -1,3 +1,5 @@
+## used in build_vector_store script to build the objections vector store
+
 import re
 import pandas as pd
 

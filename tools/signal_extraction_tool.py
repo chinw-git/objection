@@ -1,12 +1,12 @@
+# to be modified to use sematic_matcher util
+
 import json
 from typing import Type
 
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field, PrivateAttr
 
-from utils.keyword_matcher import KeywordMatcher
 from utils.semantic_matcher import SemanticMatcher
-from utils.signal_merger import SignalMerger
 
 
 class SignalExtractionInput(BaseModel):
@@ -37,7 +37,6 @@ class SignalExtractionTool(BaseTool):
 
     semantic_threshold: float = 1.20
 
-    _keyword_matcher: KeywordMatcher = PrivateAttr()
     _semantic_matcher: SemanticMatcher = PrivateAttr()
 
 
@@ -53,7 +52,6 @@ class SignalExtractionTool(BaseTool):
 
         super().__init__(**kwargs)
 
-        self._keyword_matcher = KeywordMatcher()
         self._semantic_matcher = SemanticMatcher()
 
     def extract(self, objection: str):
@@ -65,20 +63,12 @@ class SignalExtractionTool(BaseTool):
             n_results=10
         )
 
-        merged = SignalMerger.merge(
-            exact_matches,
-            semantic_matches,
-            semantic_threshold=self.semantic_threshold
-        )
 
         return {
-            "exact_matches": exact_matches,
             "semantic_matches": semantic_matches,
-            "combined_signals": merged,
             "statistics": {
                 "exact_matches": len(exact_matches),
                 "semantic_matches": len(semantic_matches),
-                "combined_signals": len(merged)
             }
         }
 
