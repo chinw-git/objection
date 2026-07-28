@@ -1,3 +1,5 @@
+# currently used by QQ's app.py
+
 from openai import OpenAI
 
 client = None

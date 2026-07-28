@@ -4,7 +4,7 @@ from typing import Type
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
 
-from tools.chroma_retriever import ChromaRetriever
+from utils.chroma_retriever import ChromaRetriever
 
 
 class ObjectionRAGInput(BaseModel):

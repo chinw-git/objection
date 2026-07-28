@@ -1,3 +1,5 @@
+# used to retrieve precedent objections by objection_rag_tool
+
 import os
 from typing import List, Dict
 
