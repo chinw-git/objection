@@ -8,7 +8,7 @@ import tempfile
 import scripts.build_vector_store as build_vector_store_module
 
 # Use your existing retriever wrapper
-from tools.chroma_retriever import ChromaRetriever
+from utils.chroma_retriever import ChromaRetriever
 
 # -----------------------------
 # Page Configuration

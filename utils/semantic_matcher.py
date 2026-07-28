@@ -1,3 +1,5 @@
+### to be modified; to retrieve top 5 keywords/signals along with respective primary buckets. to be used in signal_extraction_tool
+
 import os
 
 import chromadb
