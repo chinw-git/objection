@@ -1,4 +1,4 @@
-from tools.chroma_retriever import ChromaRetriever
+from utils.chroma_retriever import ChromaRetriever
 
 
 def print_results(results):
