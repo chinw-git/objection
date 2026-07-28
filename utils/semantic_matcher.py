@@ -4,6 +4,8 @@ import chromadb
 from dotenv import load_dotenv
 from chromadb.utils.embedding_functions import OpenAIEmbeddingFunction
 
+from collections import Counter
+
 load_dotenv()
 
 
@@ -16,12 +18,18 @@ class SemanticMatcher:
             model_name="text-embedding-3-large"
         )
 
+        from pathlib import Path
+
+        BASE_DIR = Path(__file__).resolve().parent.parent
+
+        DB_PATH = BASE_DIR / "db" / "chroma"
+
         client = chromadb.PersistentClient(
-            path="db/chroma"
+            path=str(DB_PATH)
         )
 
         self.collection = client.get_collection(
-            name="property_signals",
+            name="bucket_signals",
             embedding_function=embedding_function
         )
 
@@ -53,11 +61,33 @@ class SemanticMatcher:
             matches.append(
 
                 {
-                    "phrase": doc,
-                    "category": meta["category"],
-                    "distance": distance
+                    "signal": doc,
+                    "primary_bucket": meta["category"],
+                    "distance": float(distance)
                 }
 
             )
 
+        matches.sort(key=lambda x: x["distance"])
+
+        def predict_bucket(
+            self,
+            text,
+            n_results=5
+        ):
+
+            matches = self.match(
+                text=text,
+                n_results=n_results
+            )
+
+            bucket_counter = Counter(
+                m["primary_bucket"]
+                for m in matches
+            )
+
+            predicted_bucket = bucket_counter.most_common(1)[0][0]
+
+            return predicted_bucket, matches
+        
         return matches

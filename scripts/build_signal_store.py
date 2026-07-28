@@ -31,11 +31,13 @@ load_dotenv()
 # Configuration
 # --------------------------------------------------------
 
-SIGNAL_FILE = Path("config/property_signals.json")
+SIGNAL_FILE = Path("config/bucket_signals.json")
 
-DB_PATH = "db/chroma"
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-COLLECTION_NAME = "property_signals"
+DB_PATH = BASE_DIR / "db" / "chroma"
+
+COLLECTION_NAME = "bucket_signals"
 
 EMBEDDING_MODEL = "text-embedding-3-large"
 
@@ -63,8 +65,7 @@ embedding_function = OpenAIEmbeddingFunction(
 # --------------------------------------------------------
 
 client = chromadb.PersistentClient(
-    path=DB_PATH
-)
+    path=str(DB_PATH)
 
 collection = client.get_or_create_collection(
     name=COLLECTION_NAME,
@@ -76,15 +77,15 @@ collection = client.get_or_create_collection(
 # Clear existing signals
 # --------------------------------------------------------
 
-count = collection.count()
+try:
+    client.delete_collection(COLLECTION_NAME)
+except Exception:
+    pass
 
-if count > 0:
-
-    print(f"Removing {count} existing signals...")
-
-    ids = collection.get()["ids"]
-
-    collection.delete(ids=ids)
+collection = client.get_or_create_collection(
+    name=COLLECTION_NAME,
+    embedding_function=embedding_function
+)
 
 
 # --------------------------------------------------------
