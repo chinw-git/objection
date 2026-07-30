@@ -4,8 +4,11 @@ numpy==2.5.1
 requests==2.34.2
 python-dotenv==1.2.2
 
+# streamlit
 streamlit==1.48.0
+streamlit-option-menu
 
+# openai
 openai>=1.86,<2.0
 
 # langchain
@@ -13,6 +16,7 @@ langchain==0.3.27
 langchain-community==0.3.27
 langchain-openai==0.3.28
 langchain-experimental
+langchain-chroma<1.0
 
 # vector store
 chromadb==1.5.9

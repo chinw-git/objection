@@ -17,9 +17,9 @@ load_dotenv()
 # -----------------------------
 # Paths
 # -----------------------------
-PDF_PATH = "objection/data/PropertyTaxAct.pdf"
+file_path = "data/PropertyTaxAct.pdf"
 
-VECTOR_DB_PATH = "vectordb/"
+VECTOR_DB_PATH = "vectordb/legislation"
 
 COLLECTION_NAME = "property_tax_act"
 
@@ -31,9 +31,9 @@ embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 # -----------------------------
 # Load PDF
 # -----------------------------
-print("Loading PDF...")
+print("Loading PTA PDF...")
 
-loader = PyPDFLoader(PDF_PATH)
+loader = PyPDFLoader(file_path)
 
 documents = loader.load()
 
