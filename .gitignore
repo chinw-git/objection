@@ -19,7 +19,7 @@ __pycache__/
 .DS_Store
 
 # Chroma vector database
-db/chroma/
+vectordb/
 
 # Streamlit secrets
 .streamlit/secrets.toml

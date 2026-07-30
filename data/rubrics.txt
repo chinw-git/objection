@@ -1,0 +1,270 @@
+Below is a compressed version of the rubric, keeping all distinct criteria but removing redundancy and examples.
+
+---
+
+## 1. EASY – DISALLOW  
+**No legal ground under the Act; claim cannot be cured by RFI**
+
+### Indicators
+
+1. **No section 20(2) valuation ground**  
+   - Claim does not invoke any of these bases:  
+     - rent actually obtained (20(2)(a)(i));  
+     - comparable rent changes (20(2)(a)(ii));  
+     - sale/transfer consideration (20(2)(a)(iii));  
+     - development cost (20(2)(a)(iv));  
+     - gross takings/receipts (20(2)(a)(v), 20(2)(f));  
+     - physical changes or omission (20(2)(c), (e), 21);  
+     - change in prescribed class (20(2)(d), 9(2)–(3), 19(9)–(13)).
+
+2. **Purely subjective / vague assertions**  
+   - Only says AV is too high, unfair, or not market, without:  
+     - rent/sale/cost/receipts evidence; or  
+     - any alleged error under sections 2 or 7.
+
+3. **Reliance on excluded / irrelevant factors**  
+   - Solely relies on:  
+     - value of structural networks/machinery excluded under section 2(3)–(5); or  
+     - non‑valuation factors (hardship, business difficulties) that are not framed as remission under ministerial poverty/equity powers.
+
+4. **Purely procedural / formal complaints**  
+   - Only about:  
+     - minor mistakes in name/description, or service/seizure where person/property is identifiable (section 48);  
+     - “defective service” when statutory modes were followed.  
+   - No challenge to AV, class, period, or legal basis.
+
+5. **Time‑barred or out‑of‑jurisdiction**  
+   - Seeks:  
+     - refund for excess tax older than 5 years (section 6(15));  
+     - amendment/correction beyond:  
+       - 5 years prior to 1 January of inclusion/amendment year (19(14), 21(11)); or  
+       - 5 years before discovery of clerical/arithmetic error (20(5)).  
+   - Objection/appeal lodged outside:  
+     - 30 days for objections (20A(2), 22(2));  
+     - 30 days to Board (23(1), 29(1));  
+     - 21 days to High Court (35(1));  
+     - with no reasonable‑cause justification for late appeal (29(4)).
+
+6. **Non‑compliant objection/appeal with no substantive content**  
+   - Objection/appeal:  
+     - not in writing where required;  
+     - omits precise grounds or desired amendments (20A(1), 22(2), 29(3));  
+     - not in prescribed form/manner (29(2));  
+   - Contains no assessable valuation ground.
+
+### RFI position  
+- No RFI: missing or invalid legal ground cannot be remedied by more facts.  
+- Disallow by reference to limiting/exclusion provisions (6(15), 19(14), 20(5), 21(11), 48, timing provisions) and absence of section 20(2) grounds.
+
+---
+
+## 2. EASY – RFI (minimal)  
+**Layman grounds; a single document or simple clarification suffices**
+
+### Indicators
+
+1. **Simple rent‑based claims (20(2)(a), (b))**  
+   - States actual rent or simple rent drop / rent discrepancy vs list, in everyday terms.  
+   - May lack full lease or complete document.
+
+   **RFI**: one standard document (lease, rent invoice/receipt, brief tenancy schedule, landlord/agent letter).
+
+2. **Simple omission / mis‑entry (20(2)(e))**  
+   - Asserts wrong inclusion/omission of unit/area, or taxation of demolished space.  
+   - Facts described but proof (unit ID, date) missing.
+
+   **RFI**: layout/strata plan, MCST/landlord letter, or one occupancy/existence document.
+
+3. **Straightforward physical change (20(2)(c), 21)**  
+   - Describes renovations, enlargement, demolition/rebuild, or cessation of use, with dates but no official proof.
+
+   **RFI**: one document (completion certificate/TOP, building permit, contractor letter, dated photos).
+
+4. **Simple change of class/use (9, 19(9)–(13), 20(2)(d))**  
+   - Describes change (e.g., residential ↔ commercial, owner‑occupation) clearly but non‑technically.
+
+   **RFI**: planning/change‑of‑use approval, occupancy statement, or one usage evidence (e.g., utilities bill).
+
+5. **Clerical/arithmetic error within time limits (20(4)–(5))**  
+   - Points to mis‑total or calculation error, not valuation judgment.
+
+   **RFI**: copy of bill/assessment and brief clarification.  
+   - Correctable if within 5 years (20(5)).
+
+### What makes these “layman”  
+- Everyday language; focus on:  
+  - one rent;  
+  - clear physical/use change;  
+  - simple omission;  
+  - basic arithmetic error.  
+- No complex valuation, cost, or receipts modelling.
+
+### RFI burden  
+- Very low: one (at most two) standard documents; no iterative queries or expert input.
+
+---
+
+## 3. MEDIUM – RFI (extensive)  
+**Technical grounds; multiple documents and clarifications; some support already provided**
+
+### Indicators
+
+1. **Complex rent / market comparables (20(2)(a)(ii), (b))**  
+   - Uses multiple lettings/comparables; trends over time; partial schedules; incomplete terms.
+
+   **RFI**:  
+   - full tenancy schedule (units, areas, rent, terms, effective dates);  
+   - several leases;  
+   - explanation of comparable selection and similarity;  
+   - evidence of incentives/premiums.  
+   - Need to align with “gross amount reasonably expected” (annual value definition).
+
+2. **Transaction‑price claims with incomplete information (20(2)(a)(iii))**  
+   - Uses sale/transfer price or ≥75% share transfer, but lacks breakdown, dates, arm’s‑length status, or property link.
+
+   **RFI**:  
+   - sale & purchase agreement, completion statements;  
+   - valuation reports;  
+   - share transfer documents;  
+   - breakdown of non‑property consideration.  
+   - Must relate price to annual interest at 5% (2(6)–(7)).
+
+3. **Development cost‑based claims (20(2)(a)(iv))**  
+   - Relies on detailed development/construction cost; mixed uses; partial cost evidence.
+
+   **RFI**:  
+   - full cost schedule;  
+   - contracts and payment records;  
+   - land/building cost allocation;  
+   - supporting valuations/feasibility.  
+   - Requires technical link between cost and annual value (including possible 5% basis).
+
+4. **Gross receipts / takings with partial data (2(12), 7, 20(2)(a)(v), (f))**  
+   - Under gross‑receipts basis; asserts lower actual receipts or mis‑representation; supplies incomplete financials.
+
+   **RFI**:  
+   - full‑year audited statements;  
+   - detailed receipts breakdown;  
+   - accounting treatment explanations;  
+   - relevant ministerial order details.  
+   - Need to test AV derivation from receipts (2(12), 7, 20(2)(f)).
+
+5. **Intermediate structural/valuation complexity (2(3)–(5), 20(2)(c), 21)**  
+   - Involves machinery/structural networks, phased demolition/redevelopment, mixed taxable/non‑taxable elements; partial technical documents.
+
+   **RFI**:  
+   - detailed plans;  
+   - plant/machinery breakdown with section 2(3)–(5) status;  
+   - phase completion/use dates (21);  
+   - evidence of use by part.  
+   - Requires technical but not full‑model analysis.
+
+6. **Procedural/valuation errors mixing fact and law**  
+   - Alleged misapplication of prescribed classes (9, 19(9)–(13)), property type, or legal interpretation; some evidence supplied.
+
+   **RFI**:  
+   - planning/zoning documents;  
+   - licences;  
+   - historical correspondence;  
+   - detailed occupancy/use logs.  
+   - Need to confirm class and effective date (19(13)).
+
+### What makes these “technical”  
+- Multiple data points, structured financial or technical information, and statutory interpretation:  
+  - comparables;  
+  - transaction/cost bases;  
+  - gross receipts;  
+  - special provisions (2(3)–(7), 7).  
+- More formal language and partial statutory referencing.
+
+### RFI burden  
+- Medium–high: several documents; may require back‑and‑forth.  
+- Valuation remains largely data‑driven, not full expert‑modelling.
+
+---
+
+## 4. DIFFICULT  
+**Fully technical grounds; significant valuation judgement; extensive evidence and legal/valuation analysis**
+
+### Indicators
+
+1. **Full valuation‑method challenges**  
+   - Uses complex valuation reports (DCF, cap‑rate, yield studies); proposes AV via 5% interest on specific capital value (2(6)–(7)); detailed adjustments for market factors; explicit reliance on 2, 7, 20(2), and possibly 35(3).
+
+   **Support**: professional valuation reports, market studies, complex spreadsheets, legal submissions.  
+   **RFI**: targeted requests for underlying datasets, assumptions (discount rates, yields, growth), and valuer correspondence.  
+   - Typically needs internal valuation/legal expertise or Board/High Court guidance.
+
+2. **Major portfolio / multi‑property claims**  
+   - Covers many units/buildings; multiple uses/classes; staged redevelopment; alleges systemic inaccuracy and seeks broad reclassification and phasing (including 21(1)–(10), 9, 19(9)–(13)).
+
+   **Support**: portfolio tenancy schedules, portfolio financials, multi‑phase timelines, class‑change evidence.  
+   **RFI**: refined data by unit/phase/class; alignment with retrospective limits (19(14), 21(11)); detailed cross‑checking vs Valuation List.  
+   - Substantial valuation judgement; often Board involvement.
+
+3. **Complex gross‑receipts cases (2(12), 7, 20(2)(f))**  
+   - Under ministerial gross‑receipts order; advanced accounting/tax arguments; mixed revenue streams, bundled services, multi‑site operations; multi‑year and segmented accounts; disputes over “gross takings”.
+
+   **RFI/analysis**:  
+   - reconcile statutory “gross receipts” definition with accounting;  
+   - expert input on revenue recognition;  
+   - modelling of receipts vs AV.  
+   - Sits at intersection of valuation law, accounting, and orders.
+
+4. **Detailed machinery/plant issues (2(3)–(5))**  
+   - Disputes over which structural networks/machinery are excluded; complex industrial installations; integrated plant.
+
+   **Support**: engineering reports, asset registers, technical diagrams.  
+   **RFI/analysis**:  
+   - item‑by‑item functional and legal classification;  
+   - reliance on case law/precedent under 2(3)–(5);  
+   - valuation adjustments to remove excluded value and recalc AV.  
+   - High technical content in law and valuation.
+
+5. **Appeals alleging explicit errors of law or mixed fact‑law (33, 35)**  
+   - Often via counsel; argues wrong interpretation of “annual value”, “prescribed class”, time limits, ministerial orders, or evidence treatment; fully compliant notices (29(3)) with comprehensive evidence packages.
+
+   **RFI/analysis**:  
+   - limited extra facts; focus on full record review;  
+   - preparation of legal/valuation submissions;  
+   - coordination on Board/High Court strategy (33, 35).  
+   - Difficulty is analytical depth, not missing data.
+
+6. **Remission for poverty / “just and equitable” grounds**  
+   - Seeks remission (not only AV change) on poverty/equity grounds under ministerial discretion; extensive financial/hardship documentation.
+
+   **RFI/analysis**:  
+   - full financial and social evidence;  
+   - application of internal poverty/equity criteria;  
+   - cross‑checking against multi‑year tax assessments/payments.  
+   - Difficulty in integrating equitable considerations with statutory scheme.
+
+### What makes these “fully technical”  
+- Require:  
+  - complex valuation bases (rental, capital, cost, receipts, 5% option);  
+  - detailed legal analysis of Act and ministerial orders;  
+  - integration of large, technical evidentiary records (portfolios, financials, engineering).  
+- Often engage Board/High Court (33–35) and may raise precedent issues.
+
+### RFI burden and caseworker role  
+- Most evidence is already filed; further RFI is specialised and targeted.  
+- Main tasks:  
+  - deep assessment against section 20(2) and related provisions;  
+  - strict application of time and retrospective limits (6(15), 19(14), 20(5), 21(11));  
+  - preparation for appellate stages with valuation/legal specialists.
+
+---
+
+## Quick Mapping Guide
+
+- **EASY – DISALLOW**:  
+  - No valid section 20(2) ground; purely vague; time‑barred; only formal defects; or defective objection/appeal with no substantive valuation content.
+
+- **EASY – RFI (minimal)**:  
+  - Clear layman claim using a single statutory ground (one rent, simple structural/use change, omission, class change, or clerical error) where one standard document resolves the gap.
+
+- **MEDIUM – RFI (extensive)**:  
+  - Multiple data points or intermediate valuation concepts (comparables, transaction value, development cost, partial receipts, phased works, class misapplication) needing several documents and clarifications, but not full expert modelling.
+
+- **DIFFICULT**:  
+  - Portfolio‑level or model‑driven valuations, complex gross‑receipts or machinery issues, explicit legal‑error appeals, or remission on poverty/equity, supported by extensive technical evidence; further RFI is narrow but analysis is intensive and often involves legal/valuation experts.
