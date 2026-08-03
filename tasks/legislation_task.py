@@ -13,7 +13,11 @@ legislation_task = Task(
 
         Instructions:
         Use the retrieval tool to obtain the relevant Property Tax Act
-        sections.
+        sections. When using the "Retrieve Property Tax Act" tool:
+
+        - Pass ONLY the objection text as the value of the `query` argument.
+        - The `query` argument must be a plain string.
+        - Do NOT pass a JSON object or dictionary.
 
         Return the following information:
 

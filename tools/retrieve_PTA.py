@@ -34,6 +34,8 @@ def retrieve_legislation(query: str) -> str:
     """
     Retrieves the most relevant Property Tax Act sections.
     """
+    print(type(query))
+    print(query)
 
     docs = retriever.invoke(query)
 

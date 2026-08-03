@@ -5,23 +5,38 @@ import streamlit as st
 def render_about():
     st.set_page_config(page_title="About Us")
 
-    st.title("ℹ️ About Us")
+    st.title("🏘️ About the Project")
 
     st.markdown("""
-    ## Property Tax Objection Assistant
+    ### Overview
 
-    This application assists valuation officers by:
+    The **Property Tax Objection Assistant** is a proof-of-concept decision support application developed to explore how Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) can assist officers in assessing property tax objection cases.
 
-    - Analysing property tax objections
-    - Retrieving relevant Property Tax Act sections
-    - Retrieving similar historical objection cases
-    - Assessing objection complexity
-    - Providing supporting rationale
+    The application analyses objection grounds, assesses case complexity using predefined assessment rubrics and relevant Property Tax Act provisions, and retrieves similar historical objection cases to support consistent and informed decision-making.
 
-    ### Project Team
+    Its objective is to reduce manual effort, improve assessment consistency, and enable officers to focus on cases that require greater professional judgement.
 
-    - Member A
-    - Member B
-    - Member C
-    - Member D
+    ---
+
+    ### Objectives
+
+    This prototype is designed to:
+
+    * Assess the complexity of property tax objection cases based on established assessment rubrics.
+    * Identify relevant Property Tax Act provisions supporting each assessment.
+    * Retrieve similar historical objection cases for reference.
+    * Provide officers with structured information to support efficient and consistent case assessments.
+
+    ---
+
+    ### Disclaimer
+
+    This application is developed solely as a **proof-of-concept prototype** and is **not intended for operational use**. The outputs generated should not be relied upon for legal, financial, or official decision-making and should always be reviewed by qualified officers.
+
+    _This application demonstrates the workflow for a single property type as part of a split-team prototype implementation._
+
+    ---
+
+    **Members:** New Chin Wen, Wesley Teo
+
     """)
