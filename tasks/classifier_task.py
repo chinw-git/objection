@@ -58,6 +58,7 @@ classifier_task = Task(
     "relevant_pta_sections": [
         {
         "section": "",
+        "content": "",
         "reason": ""
         }
     ],
