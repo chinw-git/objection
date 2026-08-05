@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 from streamlit_option_menu import option_menu
 
@@ -6,11 +7,25 @@ from views.about import render_about
 from views.methodology import render_methodology
 from views.main import render_main
 
-#initialising the vector database for past objections if it doesn't exist
+#establish API key for OpenAI API access
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+
 from pathlib import Path
+from utils.build_PTA_vectordb import build_PTA_vectordb
 from utils.build_past_obj_vectordb import build_past_case_vectordb
 
+# -----------------------------
+# Check and Build Vector Databases
+# -----------------------------
 PROJECT_ROOT = Path(__file__).resolve().parent
+
+PTA_DB_FILE = (PROJECT_ROOT / "vectordb" / "legislation" / "chroma.sqlite3")
+
+if not PTA_DB_FILE.exists():
+    print("PTA vector database not found.")
+    build_PTA_vectordb()
+    print("PTA vector database built successfully.")
+
 
 VECTOR_DB_FILE = (PROJECT_ROOT / "vectordb" / "past_cases" / "chroma.sqlite3")
 
@@ -31,11 +46,7 @@ st.set_page_config(
 st.markdown("""
     <style>
     section[data-testid="stSidebar"] {
-        width: 350px !important;
-    }
-
-    section[data-testid="stSidebar"] > div {
-        width: 350px !important;
+        width: 300px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -44,7 +55,7 @@ st.markdown("""
 with st.sidebar:
     selected = option_menu(
         menu_title=None,
-        options=["ℹ️ About Us", "⚙️ Methodology", "🤖 Objection Assistant"],
+        options=["ℹ️ About Us", "🧩 Methodology", "🤖 Objection Assistant"],
         icons=["", "", ""],
         orientation="vertical",
         styles={
@@ -52,13 +63,20 @@ with st.sidebar:
             "display": "none",
         },
         "nav-link": {
-            "font-size": "15px",   
+            "font-size": "16px",
+            "font-weight": "800",  
             "text-align": "left",
+            "padding": "10px",
+            "margin": "6px 0px",
             "--hover-color": "#eee",
+            "color": "#0D47A1"
         },
         "nav-link-selected": {
             "font-size": "17px",
+            "font-weight": "bold",
+            "padding": "10px",
             "background-color": "#83BED8",
+            "color": "white",
         },
         },
     )
@@ -66,7 +84,7 @@ with st.sidebar:
 if selected == "🤖 Objection Assistant":
     render_main()
 
-elif selected == "⚙️ Methodology":
+elif selected == "🧩 Methodology":
     render_methodology()
 
 elif selected == "ℹ️ About Us":

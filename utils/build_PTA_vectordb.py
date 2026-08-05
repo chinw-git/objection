@@ -1,5 +1,3 @@
-from dotenv import load_dotenv
-
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.documents import Document
 from langchain_experimental.text_splitter import SemanticChunker
@@ -8,11 +6,7 @@ from langchain_chroma import Chroma
 #from langchain_community.vectorstores import Chroma
 
 import os
-
-# -----------------------------
-# Load environment variables
-# -----------------------------
-load_dotenv()
+import shutil
 
 # -----------------------------
 # Paths
@@ -29,41 +23,46 @@ COLLECTION_NAME = "property_tax_act"
 embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 
 # -----------------------------
-# Load PDF
+# Builds (or rebuilds) the PTA vector database.
 # -----------------------------
-print("Loading PTA PDF...")
+def build_PTA_vectordb(file_path: str = "data/PropertyTaxAct.pdf"):
 
-loader = PyPDFLoader(file_path)
+    # Delete existing vector store
+    if os.path.exists(VECTOR_DB_PATH):
+        shutil.rmtree(VECTOR_DB_PATH)
 
-documents = loader.load()
+    # Load PDF
+    print("Loading Property Tax Act PDF...")
 
-print(f"Loaded {len(documents)} pages.")
+    loader = PyPDFLoader(file_path)
+    documents = loader.load()
 
-# merge all extracted pages into a single document for chunking
-all_text = "\n".join(doc.page_content for doc in documents)
-merged_document = Document(page_content=all_text)
+    print(f"✓ Loaded {len(documents)} pages.")
 
-# -----------------------------
-# Semantic Chunking
-# -----------------------------
-print("Chunking document...")
+    ## merge all extracted pages into a single document for chunking
+    all_text = "\n".join(doc.page_content for doc in documents)
+    merged_document = Document(page_content=all_text)
 
-text_splitter = SemanticChunker(embedding_model)
+    # Semantic Chunking
+    print("Performing semantic chunking...")
 
-chunks = text_splitter.split_documents([merged_document])
+    text_splitter = SemanticChunker(embedding_model)
+    chunks = text_splitter.split_documents([merged_document])
 
-print(f"Created {len(chunks)} chunks.")
+    print(f"✓ Created {len(chunks)} semantic chunks.")
 
-# -----------------------------
-# Create Chroma Vector Store
-# -----------------------------
-print("Creating vector database...")
+    # Create Chroma Vector Store
+    print("Creating vector database...")
 
-vector_db = Chroma.from_documents(
-    documents=chunks,
-    embedding=embedding_model,
-    persist_directory=VECTOR_DB_PATH,
-    collection_name=COLLECTION_NAME,
-)
+    Chroma.from_documents(
+        documents=chunks,
+        embedding=embedding_model,
+        persist_directory=VECTOR_DB_PATH,
+        collection_name=COLLECTION_NAME,
+    )
 
-print(f"Vector database saved to {VECTOR_DB_PATH}")
+    print(f"✓ Property Tax Act vector database saved to '{VECTOR_DB_PATH}'.")
+
+
+if __name__ == "__main__":
+    build_PTA_vectordb()

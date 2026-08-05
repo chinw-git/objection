@@ -1,10 +1,6 @@
-from dotenv import load_dotenv
-
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
-from utils.build_past_obj_vectordb import build_past_case_vectordb
 
-load_dotenv()
 
 embedding_model = OpenAIEmbeddings(
     model="text-embedding-3-small"
@@ -25,9 +21,19 @@ def retrieve_similar_cases(query: str, top_k: int = 5) -> list[dict]:
     similar_cases = []
 
     for doc in docs:
+        # similar_cases.append({
+            
+        #     "content": doc.page_content,
+        #     "complexity": doc.metadata.get("complexity", "Unknown"),
+        # })
+        
         similar_cases.append({
-            "content": doc.page_content,
-            "complexity": doc.metadata.get("complexity", "Unknown"),
+            "property_type": doc.metadata.get("Property Type"),
+            "development": doc.metadata.get("Development"),
+            "strata_classification": doc.metadata.get("Strata Classification"),
+            "grounds_of_objection": doc.page_content,
+            "file_upload_count": doc.metadata.get("File Upload Count"),
+            "complexity": doc.metadata.get("Complexity"),
+            "reasoning": doc.metadata.get("Reasoning"),
         })
-
     return similar_cases
