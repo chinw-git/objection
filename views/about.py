@@ -3,7 +3,7 @@
 import streamlit as st
 
 def render_about():
-    st.set_page_config(page_title="About Us")
+    st.set_page_config(page_title="About Us", page_icon="ℹ️")
 
     st.title("🏘️ About the Project")
 
