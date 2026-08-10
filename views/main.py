@@ -1,9 +1,8 @@
 import traceback
 import streamlit as st
-import json
+import pandas as pd
 
-from objection_crew import create_obj_assessment_crew
-from tools.retrieve_past_obj import retrieve_similar_cases
+from utils.process_objection import process_objection
 from utils.export_assessment import create_assessment_output
 
 
@@ -22,22 +21,30 @@ def render_main():
         *Always consult with qualified professionals for accurate and personalised advice.*
         """)
 
-    # -----------------------------
-    # Document Upload
-    # -----------------------------
-    st.markdown("##### 📄 Knowledge Document")
+    ## -----------------------------
+    # Input Mode Selection
+    ## -----------------------------
+    with st.container(border=True):
 
-    uploaded_file = st.file_uploader(
-        label="",
-        type=["pdf", "csv", "xlsx", "xls"],
-        label_visibility="collapsed",
-        help="Upload a PDF, CSV or Excel file to build a temporary RAG knowledge base."
-    )
+        st.markdown(
+            """
+            <div style="
+                font-size: 20px;
+                font-weight: 600;
+                margin-bottom: 8px;
+            ">
+                Input Mode
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    if uploaded_file is not None:
-        st.success(f"Loaded: {uploaded_file.name}")
-
-    st.caption("Supported formats: PDF • CSV • Excel (.xlsx)")
+        input_mode = st.radio(
+            "",
+            ["💬 Single Objection", "📂 Batch Upload"],
+            horizontal=True,
+            label_visibility="collapsed",
+        )
 
     st.divider()
 
@@ -84,10 +91,10 @@ def render_main():
 
         selected_temperature = st.slider(
             "",
-            0.0,
-            2.0,
-            0.2,
-            0.1,
+            0.0, #min
+            2.0, #max
+            0.2, #default
+            0.1, #step
             label_visibility="collapsed",
             help="Lower values produce more deterministic responses. Higher values produce more varied responses."
         )
@@ -99,20 +106,21 @@ def render_main():
             st.session_state.assessment_history
         )
 
-        left, centre, right = st.columns([0.1, 0.8, 0.1])
-
+        left, centre, right = st.columns([1, 8, 1])
         with centre:
             st.download_button(
                 label="📥 Export Assessment",
                 data=excel_bytes,
                 file_name="assessment_history.xlsx",
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                use_container_width=True
+                use_container_width=True,
+                type='primary'
             )
 
             if st.button(
                 "🗑️ Clear Conversation",
-                use_container_width=True
+                use_container_width=True,
+                type='primary'
             ):
                 st.session_state.messages = [{
                         "role": "assistant",
@@ -123,224 +131,120 @@ def render_main():
 
                 st.rerun()
 
-        # st.header("⚙️ Settings")
-
-        # with st.expander("📝 System Prompt", expanded=False):
-        #     system_prompt = st.text_area(
-        #         "System Prompt",
-        #         value=ANALYSIS_SYSTEM_PROMPT,
-        #         height=150
-        #     )
-
-        # selected_model = st.selectbox(
-        #     "Model",
-        #     [
-        #         "gpt-4o-mini",
-        #         "gpt-4o"
-        #     ],
-        #     index=0
-        # )
-
-        # # Temperature
-        # temperature = st.slider(
-        #     "Temperature",
-        #     min_value=0.0,
-        #     max_value=2.0,
-        #     value=0.2,
-        #     step=0.1,
-        #     help="Lower values produce more deterministic responses. Higher values produce more varied responses."
-        # )
-
-        # # Conversation Statistics
-        # character_count = sum(
-        #     len(message["content"])
-        #     for message in st.session_state.messages[1:]
-        # )
-
-        # estimated_tokens = character_count // 4
-
-        # st.divider()
-
-        # st.markdown(
-        #     "<h5 style='margin-bottom:0.3rem;'>📊 Conversation</h5>",
-        #     unsafe_allow_html=True
-        # )
-
-        # st.markdown(
-        #     f"""
-        #     <div style="font-size:13px; color:gray;">
-        #         <strong>Characters:</strong> {character_count:,}<br>
-        #         <strong>Estimated Tokens:</strong> {estimated_tokens:,}
-        #     </div>
-        #     """,
-        #     unsafe_allow_html=True,
-        # )
-
-        # st.divider()
-
-        # # -----------------------------
-        # # Export Conversation
-        # # -----------------------------
-        # conversation_text = ""
-
-        # for message in st.session_state.messages:
-
-        #     role = message["role"].upper()
-
-        #     conversation_text += (
-        #         f"========== {role} ==========\n"
-        #         f"{message['content']}\n\n"
-        #     )
-
-        # st.download_button(
-        #     label="📥 Download Chat",
-        #     data=conversation_text,
-        #     file_name="property_objection_chat.txt",
-        #     mime="text/plain"
-        # )
-
-        # if st.button("🗑️ Clear Conversation"):
-        #     st.session_state.messages = [
-        #         {
-        #             "role": "assistant",
-        #             "content": "Please provide your property objection case for analysis."
-        #         }
-        #     ]
-
-        #     st.rerun()
-
-    # -----------------------------
-    # Display Previous Messages
-    # -----------------------------
-    for message in st.session_state.messages:
-
-        with st.chat_message(message["role"]):
-
-            # Assistant analysis
-            # ===== CHANGED START =====
-            if (message["role"] == "assistant"and "classification" in message):
-
-                classification = message["classification"]
-                recommendation = message["recommendation"]
-            # ===== CHANGED END =====
-
-                # -----------------------------
-                # 1. Complexity Assessment
-                # -----------------------------
-                st.markdown("""
-                <div style="
-                    background-color:#E3F2FD;
-                    padding:10px 15px;
-                    border-radius:8px;
-                    margin-top:10px;
-                    margin-bottom:15px;
-                ">
-                <h3 style="margin:0; color:#0D47A1;">
-                    📋 Complexity Assessment
-                </h3>
+        # -----------------------------
+        # Logout Button
+        # -----------------------------
+        st.divider()
+        left, centre, right = st.columns([1, 8, 1])
+        with centre:
+            st.markdown(
+                f"""
+                <div style="text-align: center; margin-bottom: 10px">
+                    Logged in as <b>{st.session_state['username_logged_in']}</b>
                 </div>
-                """, unsafe_allow_html=True)
+                """,
+                unsafe_allow_html=True
+            )
+        left, centre, right = st.columns([2, 6, 2])
+        with centre:
+            if st.button("🚪 Logout", use_container_width=True):
+                st.session_state.pop("password_correct", None)
+                st.session_state.pop("username_logged_in", None)
+                st.rerun()
 
-                # complexity category
-                # st.markdown(f"#### {classification['complexity']}")
-                complexity = classification["complexity"]
 
-                if "easy" in complexity.lower():
-                    bg = "#E8F5E9"
-                    fg = "#2E7D32"
-                elif "medium" in complexity.lower():
-                    bg = "#FFF8E1"
-                    fg = "#F9A825"
-                else:
-                    bg = "#FFEBEE"
-                    fg = "#C62828"
+    if input_mode == "💬 Single Objection":
+        # -----------------------------
+        # Display Previous Messages
+        # -----------------------------
+        for message in st.session_state.messages:
 
-                st.markdown(
-                    f"""
-                    <div style="
-                        display:inline-block;
-                        background:{bg};
-                        color:{fg};
-                        padding:10px 20px;
-                        margin-bottom:20px;
-                        border-radius:999px;
-                        font-size:20px;
-                        font-weight:600;
-                    ">
-                        {complexity}
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
+            with st.chat_message(message["role"]):
 
-                # reasoning for complexity
-                st.markdown("##### Reasoning")
-                st.write(classification["reasoning"].replace("$", r"\$")) #prevent Streamlit from interpreting $ as a LaTeX delimiter
-
-                # triggered rubric criteria
-                st.markdown("##### Triggered Rubric Criteria")
-
-                for criterion in classification["rubric_criteria"]:
-                    st.markdown(f"- {criterion}")
-
-                #relevant Property Tax Act sections
-                st.markdown("##### Relevant Property Tax Act Sections")
-
-                for section in classification["relevant_pta_sections"]:
-
-                    with st.expander("Section " + section["section"]):
-
-                        st.markdown("**Legislation**")
-                        st.info(section["content"])
-
-                        st.markdown("**Why it applies**")
-                        st.write(section["reason"])
-
-                # -----------------------------
-                # 2. Recommendation (next steps)
-                # -----------------------------
-
+                # Assistant analysis
                 # ===== CHANGED START =====
-                st.divider()
+                if (message["role"] == "assistant"and "classification" in message):
 
-                st.markdown("""
-                <div style="
-                    background-color:#E3F2FD;
-                    padding:10px 15px;
-                    border-radius:8px;
-                    margin-top:10px;
-                    margin-bottom:15px;
-                ">
-                <h3 style="margin:0; color:#0D47A1;">
-                    📝 Recommendation
-                </h3>
-                </div>
-                """, unsafe_allow_html=True)
-
-                st.markdown("##### Recommended Next Steps")
-                #RFI indicator
-                if recommendation["rfi_needed"]:
-                    st.info("📄 Request for Information (RFI) Required")
-                else:
-                    st.success("No Request for Information Required")
-
-                #next steps
-                for step in recommendation["next_steps"]:
-                    st.markdown(f"- {step}")
-
-                st.markdown("##### Escalation")
-                #escalation info
-                if recommendation["escalation_needed"]:
-                    st.warning(recommendation["escalation_reason"])
-                else:
-                    st.success("No escalation required.")
+                    classification = message["classification"]
+                    recommendation = message["recommendation"]
                 # ===== CHANGED END =====
 
-                # -----------------------------
-                # 3. Similar Past Cases
-                # -----------------------------
-                if "similar_cases" in message:
+                    # -----------------------------
+                    # 1. Complexity Assessment
+                    # -----------------------------
+                    st.markdown("""
+                    <div style="
+                        background-color:#E3F2FD;
+                        padding:10px 15px;
+                        border-radius:8px;
+                        margin-top:10px;
+                        margin-bottom:15px;
+                    ">
+                    <h3 style="margin:0; color:#0D47A1;">
+                        📋 Complexity Assessment
+                    </h3>
+                    </div>
+                    """, unsafe_allow_html=True)
 
+                    # complexity category
+                    complexity = classification["complexity"]
+
+                    if "easy" in complexity.lower():
+                        bg = "#E8F5E9"
+                        fg = "#2E7D32"
+                    elif "medium" in complexity.lower():
+                        bg = "#FFF8E1"
+                        fg = "#F9A825"
+                    else:
+                        bg = "#FFEBEE"
+                        fg = "#C62828"
+
+                    st.markdown(
+                        f"""
+                        <div style="
+                            display:inline-block;
+                            background:{bg};
+                            color:{fg};
+                            padding:10px 20px;
+                            margin-bottom:20px;
+                            border-radius:999px;
+                            font-size:20px;
+                            font-weight:600;
+                        ">
+                            {complexity}
+                        </div>
+                        """,
+                        unsafe_allow_html=True
+                    )
+
+                    # reasoning for complexity
+                    st.markdown("##### Reasoning")
+                    st.write(classification["reasoning"].replace("$", r"\$")) #prevent Streamlit from interpreting $ as a LaTeX delimiter
+
+                    # triggered rubric criteria
+                    st.markdown("##### Triggered Rubric Criteria")
+
+                    for criterion in classification["rubric_criteria"]:
+                        st.markdown(f"- {criterion}")
+
+                    #relevant Property Tax Act sections
+                    st.markdown("##### Relevant Property Tax Act Sections")
+
+                    for section in classification["relevant_pta_sections"]:
+
+                        with st.expander("Section " + section["section"]):
+
+                            st.markdown("**Legislation**")
+                            st.info(section["content"])
+
+                            st.markdown("**Why it applies**")
+                            st.write(section["reason"])
+
+                    # -----------------------------
+                    # 2. Recommendation (next steps)
+                    # -----------------------------
+
+                    # ===== CHANGED START =====
                     st.divider()
 
                     st.markdown("""
@@ -352,105 +256,289 @@ def render_main():
                         margin-bottom:15px;
                     ">
                     <h3 style="margin:0; color:#0D47A1;">
-                        📂 Similar Past Cases
+                        📝 Recommendation
                     </h3>
                     </div>
                     """, unsafe_allow_html=True)
 
-                    for i, case in enumerate(message["similar_cases"], start=1):
-                        with st.expander(f"Past Case {i}"):
+                    st.markdown("##### Recommended Next Steps")
+                    #RFI indicator
+                    left, right = st.columns([4, 6])
+                    with left:
+                        if recommendation["rfi_needed"]:
+                            st.info("📄 Request for Information (RFI) Required")
+                        else:
+                            st.success("No Request for Information Required")
 
-                            content = case["grounds_of_objection"].replace("$", r"\$") #prevent Streamlit from interpreting $ as a LaTeX delimiter
+                    #next steps
+                    for step in recommendation["next_steps"]:
+                        st.markdown(f"- {step}")
 
-                            st.markdown("**Property Type**")
-                            st.write(case["property_type"])
-
-                            st.markdown("**Development**")
-                            st.write(case["development"])
-
-                            st.markdown("**Strata Classification**")
-                            st.write(case["strata_classification"])
-
-                            st.markdown(content) #objection text
-
-                            st.markdown("**No. of Uploaded Files**")
-                            st.write(case["file_upload_count"])
-
-                            st.markdown(f"""
-                            **Complexity Category**  
-                            {case["complexity"]}
-                            """)
-
-                            st.markdown("**Reasoning**")
-                            st.write(case["reasoning"])
-
-            else:
-                st.markdown(message["content"])
-
-    # -----------------------------
-    # Chat Input
-    # -----------------------------
-    if prompt := st.chat_input("Describe your property tax objection..."):
-
-        # Save user message
-        st.session_state.messages.append(
-            {
-                "role": "user",
-                "content": prompt
-            }
-        )
-
-        with st.chat_message("user"):
-            st.markdown(prompt)
-
-        with st.chat_message("assistant"):
-            try:
-                with st.spinner("Analysing objection..."):
-
-                    # -----------------------------
-                    # Run Crew
-                    # -----------------------------
-                    crew = create_obj_assessment_crew(selected_model, selected_temperature) #use selected model & temperature from the sidebar settings
-
-                    result = crew.kickoff(
-                        inputs={
-                            "objection": prompt
-                        }
-                    )
-
-                    # ===== CHANGED START =====
-                    result_json = json.loads(result.raw)
-
-                    classification = result_json["classification"]
-                    recommendation = result_json["recommendation"]
+                    st.markdown("##### Escalation")
+                    #escalation info
+                    if recommendation["escalation_needed"]:
+                        st.warning(recommendation["escalation_reason"])
+                    else:
+                        left, right = st.columns([4, 6])
+                        with left:
+                            st.success("No escalation required.")
                     # ===== CHANGED END =====
 
                     # -----------------------------
-                    # Retrieve similar past cases
+                    # 3. Similar Past Cases
                     # -----------------------------
-                    similar_cases = retrieve_similar_cases(prompt)
+                    if "similar_cases" in message:
 
-                # ===== CHANGED START =====
-                st.session_state.messages.append({
-                        "role": "assistant",
-                        "content": "Complexity assessment completed.",
-                        "classification": classification,
-                        "recommendation": recommendation,
-                        "similar_cases": similar_cases,
-                })
-                # ===== CHANGED END =====
+                        st.divider()
 
-                # Save assessment outputs for possible export
-                st.session_state.assessment_history.append({
-                    "grounds_of_objection": prompt,
-                    "classification": classification,
-                    "recommendation": recommendation,
-                    "similar_cases": similar_cases,
-                })
+                        st.markdown("""
+                        <div style="
+                            background-color:#E3F2FD;
+                            padding:10px 15px;
+                            border-radius:8px;
+                            margin-top:10px;
+                            margin-bottom:15px;
+                        ">
+                        <h3 style="margin:0; color:#0D47A1;">
+                            📂 Similar Past Cases
+                        </h3>
+                        </div>
+                        """, unsafe_allow_html=True)
 
-                st.rerun()
+                        for i, case in enumerate(message["similar_cases"], start=1):
+                            with st.expander(f"Past Case {i}"):
 
-            except Exception as e:
-                traceback.print_exc()
-                st.error("Unable to analyse the objection.")
-                print(e)
+                                content = case["grounds_of_objection"].replace("$", r"\$") #prevent Streamlit from interpreting $ as a LaTeX delimiter
+
+                                st.markdown("**Property Type**")
+                                st.write(case["property_type"])
+
+                                st.markdown("**Development**")
+                                st.write(case["development"])
+
+                                st.markdown("**Strata Classification**")
+                                st.write(case["strata_classification"])
+
+                                st.markdown(content) #objection text
+
+                                st.markdown("**No. of Uploaded Files**")
+                                st.write(case["file_upload_count"])
+
+                                st.markdown(f"""
+                                **Complexity Category**  
+                                {case["complexity"]}
+                                """)
+
+                                st.markdown("**Reasoning**")
+                                st.write(case["reasoning"])
+
+                else:
+                    st.markdown(message["content"])
+
+        # -----------------------------
+        # Chat Input
+        # -----------------------------
+        if prompt := st.chat_input("Describe your property tax objection..."):
+
+            # Save user message
+            st.session_state.messages.append(
+                {
+                    "role": "user",
+                    "content": prompt.replace("$", r"\$")
+                }
+            )
+
+            with st.chat_message("user"):
+                st.markdown(prompt.replace("$", r"\$"))
+
+            with st.chat_message("assistant"):
+                try:
+                    with st.spinner("Analysing objection..."):
+
+                        # -----------------------------
+                        # Process objection
+                        # -----------------------------
+                        assessment = process_objection(prompt, selected_model, selected_temperature) #use selected model & temperature from the sidebar settings
+
+                    # Save assessment outputs for display
+                    st.session_state.messages.append({
+                            "role": "assistant",
+                            "content": "Complexity assessment completed.",
+                            "classification": assessment["classification"],
+                            "recommendation": assessment["recommendation"],
+                            "similar_cases": assessment["similar_cases"],
+                    })
+
+                    # Save assessment outputs for possible export
+                    st.session_state.assessment_history.append(assessment)
+
+                    st.rerun()
+
+                except Exception as e:
+                    traceback.print_exc()
+                    st.error("Unable to analyse the objection.")
+                    print(e)
+
+    else:
+        # -----------------------------
+        # Upload bulk objections
+        # -----------------------------
+        st.markdown("##### Objection File Upload")
+
+        left, right = st.columns([2.5, 7.5])
+        with left:
+            uploaded_file = st.file_uploader(
+                label="",
+                type=["csv", "xlsx"],
+                label_visibility="collapsed",
+                help="Upload a CSV or Excel file containing property objections."
+            )
+            st.caption("Ensure file has required column: 'ExplanatoryNote'")
+
+        #if got file uploaded
+        if uploaded_file is not None:
+
+            # Read uploaded file
+            if uploaded_file.name.endswith(".csv"):
+                df = pd.read_csv(uploaded_file)
+            else:
+                df = pd.read_excel(uploaded_file)
+
+            # Validate required column
+            if "ExplanatoryNote" not in df.columns:
+                left, right = st.columns([2.8, 7.2])
+                with left:
+                    st.error("Invalid file. The file must contain an 'ExplanatoryNote' column.")
+
+            else:
+                left, right = st.columns([2.8, 7.2])
+                with left:
+                    st.success(f"{uploaded_file.name} uploaded successfully")
+
+                st.caption(f"{len(df)} objections found.")
+
+                # Only appears if validation passes
+                left, center, right = st.columns([3, 4, 3])
+                with center:
+                    process_clicked = st.button("🔍 Process Objections", use_container_width=True, type='primary')
+
+                if process_clicked:
+                    left, center, right = st.columns([2, 6, 2])
+                    with center:
+                        progress = st.progress(0)
+                        status = st.empty()
+
+                        results = []
+                        #process each objection
+                        for i, row in df.iterrows():
+                            objection = str(row["ExplanatoryNote"]).strip()
+
+                            if not objection:
+                                continue
+
+                            with st.spinner(f"Processing objection {i + 1} of {len(df)}..."):
+
+                                try:
+                                    assessment = process_objection(
+                                        objection=objection,
+                                        model=selected_model,
+                                        temperature=selected_temperature,
+                                    )
+
+                                    results.append(assessment)
+                                    
+                                    progress.progress((i + 1) / len(df), text=f"{(i + 1)} of {len(df)} done")
+
+                                    # Save assessment outputs for possible export
+                                    st.session_state.assessment_history.append(assessment)
+
+                                except Exception as e:
+                                    traceback.print_exc()
+                                    st.error(f"Unable to analyse objection {i + 1}.")
+                                    print(e)
+
+                        status.success(f"Completed {len(results)} objections.")
+
+                        # -----------------------------
+                        # Display Bulk Assessment Summary
+                        # -----------------------------
+                        st.markdown("""
+                        <div style="
+                            background-color:#E3F2FD;
+                            padding:10px 15px;
+                            border-radius:8px;
+                            margin-top:10px;
+                            margin-bottom:15px;
+                        ">
+                        <h3 style="margin:0; color:#0D47A1;">
+                            Assessment Summary
+                        </h3>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                        easy_disallow, easy_rfi, medium_rfi, difficult =  0, 0, 0, 0
+
+                        for assessment in results:
+
+                            complexity = assessment["classification"]["complexity"]
+
+                            if "easy – disallow" in complexity.lower():
+                                easy_disallow += 1
+                            elif "easy – rfi" in complexity.lower():
+                                easy_rfi += 1
+                            elif "medium – rfi" in complexity.lower():
+                                medium_rfi += 1
+                            else:
+                                difficult += 1
+
+                        col1, col2, col3, col4 = st.columns(4)
+
+                        #styling the metrics
+                        def metric_card(label, value, bg, fg):
+                            st.markdown(
+                                f"""
+                                <div style="
+                                    background-color: {bg};
+                                    padding: 12px 16px;
+                                    border-radius: 10px;
+                                    text-align: center;
+                                    border: 3px solid {fg}20;
+                                ">
+                                    <div style="
+                                        color: {fg};
+                                        font-size: 14px;
+                                        font-weight: 600;
+                                        margin-bottom: 4px;
+                                    ">
+                                        {label}
+                                    </div>
+                                    <div style="
+                                        color: {fg};
+                                        font-size: 28px;
+                                        font-weight: 700;
+                                    ">
+                                        {value}
+                                    </div>
+                                </div>
+                                """,
+                                unsafe_allow_html=True
+                            )
+
+                        with col1:
+                            metric_card("EASY – DISALLOW", easy_disallow, "#E8F5E9", "#2E7D32")
+
+                        with col2:
+                            metric_card("EASY – RFI (minimal)", easy_rfi, "#E8F5E9", "#2E7D32")
+
+                        with col3:
+                            metric_card("MEDIUM – RFI (extensive)", medium_rfi, "#FFF8E1", "#F9A825")
+
+                        with col4:
+                            metric_card("DIFFICULT", difficult, "#FFEBEE", "#C62828")
+
+                        st.divider()
+                        st.markdown("""
+                            Want to view the full assessment details? <br>
+                            Click on the <b>📥 Export Assessment</b> button at the sidebar on the left to download the results.
+                        """, unsafe_allow_html=True
+                        )

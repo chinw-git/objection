@@ -2,6 +2,9 @@ import os
 import streamlit as st
 from streamlit_option_menu import option_menu
 
+#import password check
+from utils.login_check import check_password
+
 #import the pages
 from views.about import render_about
 from views.methodology import render_methodology
@@ -13,6 +16,21 @@ os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 from pathlib import Path
 from utils.build_PTA_vectordb import build_PTA_vectordb
 from utils.build_past_obj_vectordb import build_past_case_vectordb
+
+# -----------------------------
+# Page Configuration
+# -----------------------------
+st.set_page_config(
+        page_title="Objection Assistant",
+        page_icon="🏡",
+        layout="wide"
+    )
+
+# -----------------------------
+# Password Authentication
+# -----------------------------
+if not check_password():
+    st.stop()
 
 # -----------------------------
 # Check and Build Vector Databases
@@ -34,14 +52,6 @@ if not VECTOR_DB_FILE.exists():
     build_past_case_vectordb()
     print("Past objection vector database built successfully.")
 
-# -----------------------------
-# Page Configuration
-# -----------------------------
-st.set_page_config(
-        page_title="Property Tax Objection Assistant",
-        page_icon="🏡",
-        layout="wide"
-    )
 
 st.markdown("""
     <style>
@@ -55,7 +65,7 @@ st.markdown("""
 with st.sidebar:
     selected = option_menu(
         menu_title=None,
-        options=["ℹ️ About Us", "🧩 Methodology", "🤖 Objection Assistant"],
+        options=["About Us", "Methodology", "Objection Assistant"],
         icons=["", "", ""],
         orientation="vertical",
         styles={
@@ -64,29 +74,32 @@ with st.sidebar:
         },
         "nav-link": {
             "font-size": "16px",
-            "font-weight": "800",  
+            "font-weight": "700",
+            "font-family": "'Open Sans', sans-serif !important",  
             "text-align": "left",
             "padding": "10px",
             "margin": "6px 0px",
             "--hover-color": "#eee",
-            "color": "#0D47A1"
+            "background-color": "transparent",
+            "color": "#39505C"
         },
         "nav-link-selected": {
             "font-size": "17px",
             "font-weight": "bold",
+            "font-family": "'Open Sans', sans-serif !important",
             "padding": "10px",
-            "background-color": "#83BED8",
-            "color": "white",
+            "background-color": "#DBEDF3",
+            "color": "#29799E",
         },
         },
     )
 
-if selected == "🤖 Objection Assistant":
+if selected == "Objection Assistant":
     render_main()
 
-elif selected == "🧩 Methodology":
+elif selected == "Methodology":
     render_methodology()
 
-elif selected == "ℹ️ About Us":
+elif selected == "About Us":
     render_about()
 
