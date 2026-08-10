@@ -3,7 +3,7 @@
 import streamlit as st
 
 def render_about():
-    st.set_page_config(page_title="About Us", page_icon="ℹ️")
+    # st.set_page_config(page_title="About Us", page_icon="ℹ️")
 
     st.title("🏘️ About the Project")
 
@@ -29,11 +29,11 @@ def render_about():
 
     ---
 
-    ### Disclaimer
+    #### Disclaimer
 
     This application is developed solely as a **proof-of-concept prototype** and is **not intended for operational use**. The outputs generated should not be relied upon for legal, financial, or official decision-making and should always be reviewed by qualified officers.
 
-    _This application demonstrates the workflow for a single property type as part of a split-team prototype implementation._
+    _Prototype is developed in conjunction with Team 2 - our solution shares a common application framework with each team developing a tailored methodology for our respective property types._
 
     ---
 
