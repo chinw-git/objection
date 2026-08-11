@@ -38,14 +38,14 @@ def check_password():
             font-size: 40px;
             font-weight: 700;
             margin-top: 40px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
         }
 
         .login-subtitle {
             text-align: center;
             color: #71858F;
             font-size: 22px;
-            margin-bottom: 25px;
+            margin-bottom: 35px;
         }
 
         .stTextInput label p {
@@ -57,6 +57,15 @@ def check_password():
        .stTextInput {
             border-radius: 8px;
             font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        [data-testid="stAlert"] {
+            text-align: center;
+            margin-top: 15px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%;
         }
     </style>
     """, unsafe_allow_html=True)
@@ -78,8 +87,8 @@ def check_password():
             unsafe_allow_html=True
         )
 
-    left, center, right = st.columns([4, 2, 4])
-    with center:
+    _, input_center, _ = st.columns([4, 2, 4])
+    with input_center:
         st.text_input(
             "Username",
             key="username",
@@ -91,8 +100,17 @@ def check_password():
             type="password",
             key="password",
             placeholder="Enter your password",
-            on_change=password_entered
         )
+
+        # centralise the Login button
+        button_left, button_center, button_right = st.columns([3, 2, 3])
+        with button_center:
+            st.button(
+                "Login",
+                type="primary",
+                on_click=password_entered,
+                use_container_width=True
+            )
 
         if "password_correct" in st.session_state:
             st.error("😕 Incorrect username or password")
