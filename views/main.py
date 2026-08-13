@@ -387,7 +387,7 @@ def render_main():
             """, unsafe_allow_html=True
         )
 
-        upload_left, upload_right = st.columns([2.5, 7.5])
+        upload_left, upload_right = st.columns([3, 7])
         with upload_left:
             uploaded_file = st.file_uploader(
                 label="Objection File Upload",
@@ -397,8 +397,12 @@ def render_main():
             )
             st.caption("Ensure file has required column: 'ExplanatoryNote'")
 
+        if uploaded_file is None:
+            #reset batch results when no file uploaded
+            st.session_state.batch_results = []
+
         #if got file uploaded
-        if uploaded_file is not None:
+        else:
 
             # Read uploaded file
             if uploaded_file.name.endswith(".csv"):
@@ -408,12 +412,12 @@ def render_main():
 
             # Validate required column
             if "ExplanatoryNote" not in df.columns:
-                upload_error_left, upload_error_right = st.columns([2.8, 7.2])
+                upload_error_left, upload_error_right = st.columns([3.3, 6.7])
                 with upload_error_left:
                     st.error("Invalid file. The file must contain an 'ExplanatoryNote' column.")
 
             else:
-                upload_success_left, upload_success_right = st.columns([2.5, 7.5])
+                upload_success_left, upload_success_right = st.columns([3, 7])
                 with upload_success_left:
                     st.success(f"{uploaded_file.name} uploaded successfully")
 
