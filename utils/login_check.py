@@ -32,19 +32,11 @@ def check_password():
     # Stylings for the login page
     st.markdown("""
     <style>
-        .login-title {
-            text-align: center;
-            color: #39505C;
-            font-size: 40px;
-            font-weight: 700;
-            margin-top: 40px;
-            margin-bottom: 10px;
-        }
-
         .login-subtitle {
             text-align: center;
             color: #71858F;
-            font-size: 22px;
+            font-size: 20px;
+            margin-top: 15px;
             margin-bottom: 35px;
         }
 
@@ -72,14 +64,12 @@ def check_password():
 
     # login form
     # appears if not login before / credentials incorrect
-    left, center, right = st.columns([2.5, 5, 2.5])
+    left, center, right = st.columns([3.5, 3, 3.5])
     with center:
+        st.image("assets/proj_logo.png")
+
         st.markdown(
             """
-            <div class="login-title">
-                🏡 Property Tax Objection Assistant
-            </div>
-
             <div class="login-subtitle">
                 <i>Sign in to access the Objection Assistant</i>
             </div>

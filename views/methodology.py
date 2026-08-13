@@ -57,56 +57,8 @@ def render_methodology():
         unsafe_allow_html=True
         )
 
-        # vector stores
-        st.subheader("Knowledge and Retrieval")
-
-        st.markdown(
-        """
-        <div style="
-        background-color: #EAF3FA;
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 10px;
-        ">
-        <h5>⚖️ Property Tax Act (PTA)</h5>
-        <p>
-                The primary source of legislative provisions 
-                for the assessment and classification of objections.
-        </p>
-        <p>
-                <b>Document processing</b><br>
-                PTA content is divided into semantically meaningful chunks using <u>SemanticChunker</u>, 
-                allowing related provisions to remain together and improving the retrieval of relevant legislative context.
-        </p>
-
-        <p>
-                <b>Retrieval</b><br>
-                The processed PTA chunks are stored in a legislation vector store.
-                Relevant provisions are retrieved using <u>MultiQueryRetriever</u>, which generates multiple variations of the objection to
-                capture different ways the same issue may be expressed, improving retrieval of relevant PTA provisions.
-        </p>
-        <h5>📂 Past Objection Cases</h5>
-        <p>
-                Past objection cases are retrieved separately as reference material
-                to provide additional context and examples of similar cases for users.
-        </p>
-        <p>
-                <b>Document processing</b><br>
-                Each past objection case is retained as an individual document without further chunking, preserving the 
-                complete objection text and its context for retrieval as a reference.
-        </p>
-        <p>
-                <b>Retrieval</b><br>
-                Each past objection document is stored in a 'past cases' vector store.
-                Similar past cases are identified based on their semantic similarity to the submitted objection.
-        </p>
-        </div>
-        """,
-        unsafe_allow_html=True
-        )
-
         # MULTI-AGENT APPROACH
-        st.subheader("🤖 Multi-Agent Approach")
+        st.subheader("Multi-Agent Approach")
 
         st.markdown("""Each agent performs a specialised role within the overall workflow.""")
 
@@ -143,6 +95,53 @@ def render_methodology():
                         """,
                         unsafe_allow_html=True
                 )
+
+        # Vector Stores
+        st.subheader("Knowledge and Retrieval")
+
+        st.markdown(
+        """
+        <div style="
+        background-color: #EAF3FA;
+        padding: 10px 20px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        ">
+        <h5>⚖️ <u>Property Tax Act (PTA)</u></h5>
+                <p>
+                The primary source of legislative provisions 
+                for the assessment and classification of objections.
+                </p>
+                <p>
+                <b>Document processing</b><br>
+                PTA content is divided into semantically meaningful chunks using <u>SemanticChunker</u>, 
+                allowing related provisions to remain together and improving the retrieval of relevant legislative context.
+                </p>
+                <p>
+                <b>Retrieval</b><br>
+                The processed PTA chunks are stored in a legislation vector store. <br>
+                The <b>top 5</b> most relevant provisions are retrieved using <u>MultiQueryRetriever</u>, which generates multiple variations of the objection to
+                capture different ways the same issue may be expressed, improving retrieval of relevant PTA provisions.
+                </p>
+        <h5>📂 <u>Past Objection Cases</u></h5>
+                <p>
+                Past objection cases are retrieved separately as reference material
+                to provide additional context and examples of similar cases for users.
+                </p>
+                <p>
+                <b>Document processing</b><br>
+                Each past objection case is retained as an individual document without further chunking, preserving the 
+                complete objection text and its context for retrieval as a reference.
+                </p>
+                <p>
+                <b>Retrieval</b><br>
+                Each past objection document is stored in a 'past cases' vector store. <br>
+                Similar past cases are identified based on their semantic similarity to the submitted objection, with the <b>top 5</b> most similar cases retrieved as references.
+                </p>
+        </div>
+        """,
+        unsafe_allow_html=True
+        )
 
 
         # COMPLEXITY ASSESSMENT
@@ -213,14 +212,14 @@ def render_methodology():
         st.markdown("**1. Complexity Assessment**")
         st.markdown("""
         The assessed complexity level of the objection, together with the reasoning behind the classification. <br>
-        Property Tax Act (PTA) provisions that were relevant in determining the complexity level will be displayed along
-        with the rationale for its relevance.
+        Relevant Property Tax Act (PTA) provisions supporting the assessment will also be displayed along with the rationale for its relevance. <br>
+        _Up to 5_ relevant provisions may be shown, depending on their relevance to the assessment.
         """, unsafe_allow_html=True
         )
 
-        st.markdown("**2. Recommendation Next Steps**")
+        st.markdown("**2. Recommendation and Next Steps**")
         st.markdown("""
-        Recommended actions for officers based on the assessed complexity, such as requesting tenancy information or determining whether
+        Recommended follow-up actions for officers based on the assessed complexity, such as requesting tenancy information or determining whether
         escalation to a senior officer is required.
         """
         )

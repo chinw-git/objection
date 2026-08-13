@@ -22,7 +22,7 @@ from utils.build_past_obj_vectordb import build_past_case_vectordb
 # -----------------------------
 st.set_page_config(
         page_title="Objection Assistant",
-        page_icon="🏡",
+        page_icon="assets/app_icon.png",
         layout="wide"
     )
 
@@ -89,11 +89,33 @@ with st.sidebar:
             "font-family": "'Open Sans', sans-serif !important",
             "padding": "10px",
             "background-color": "#DBEDF3",
-            "color": "#29799E",
+            "color": "#497488",
         },
         },
     )
 
+    # -----------------------------
+    # Logout Button
+    # -----------------------------
+    st.divider()
+    left, centre, right = st.columns([1, 8, 1])
+    with centre:
+        st.markdown(
+            f"""
+            <div style="text-align: center; margin-bottom: 10px">
+                Logged in as <b>{st.session_state['username_logged_in']}</b>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+    left, centre, right = st.columns([2, 6, 2])
+    with centre:
+        if st.button("🚪 Logout", use_container_width=True):
+            st.session_state.pop("password_correct", None)
+            st.session_state.pop("username_logged_in", None)
+            st.rerun()
+
+#render respective pages
 if selected == "Objection Assistant":
     render_main()
 
