@@ -28,22 +28,30 @@ def render_main():
 
         st.markdown(
             """
-            <div style="
+            <style>
+            [data-testid="stRadio"] > label p  {
                 font-size: 20px;
                 font-weight: 600;
-                margin-bottom: 8px;
-            ">
-                Input Mode
-            </div>
-            """,
-            unsafe_allow_html=True,
+                color: #39505C;
+            }
+
+            [data-testid="stTooltipContent"] {
+                max-width: 450px !important;
+                text-align: left !important;
+            }
+            </style>
+            """, 
+            unsafe_allow_html=True
         )
 
         input_mode = st.radio(
-            "",
-            ["💬 Single Objection", "📂 Batch Upload"],
+            "Input Mode",
+            ["Single Objection 💬", "Batch Upload 📂"],
             horizontal=True,
-            label_visibility="collapsed",
+            help = """
+            **Single Objection** allows you to assess _one case at a time_.  
+            **Batch Upload** allows you to assess _multiple cases_ from a CSV or Excel file.
+            """,
         )
 
     st.divider()
@@ -62,6 +70,9 @@ def render_main():
     if "assessment_history" not in st.session_state:
         st.session_state.assessment_history = []
 
+    if "batch_results" not in st.session_state:
+        st.session_state.batch_results = []
+
     # -----------------------------
     # Sidebar
     # -----------------------------
@@ -75,7 +86,7 @@ def render_main():
             font-weight: 700;
             margin-bottom: 14px;
         ">
-            ⚙️ Settings
+            ⚙️ Settings ⚙️
         </div>
         """, unsafe_allow_html=True)
 
@@ -106,8 +117,8 @@ def render_main():
             st.session_state.assessment_history
         )
 
-        left, centre, right = st.columns([1, 8, 1])
-        with centre:
+        _, sidebar_centre, _ = st.columns([1, 8, 1])
+        with sidebar_centre:
             st.download_button(
                 label="📥 Export Assessment",
                 data=excel_bytes,
@@ -128,32 +139,12 @@ def render_main():
                 }]
 
                 st.session_state.assessment_history = []
+                st.session_state.batch_results = []
 
                 st.rerun()
 
-        # -----------------------------
-        # Logout Button
-        # -----------------------------
-        st.divider()
-        left, centre, right = st.columns([1, 8, 1])
-        with centre:
-            st.markdown(
-                f"""
-                <div style="text-align: center; margin-bottom: 10px">
-                    Logged in as <b>{st.session_state['username_logged_in']}</b>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-        left, centre, right = st.columns([2, 6, 2])
-        with centre:
-            if st.button("🚪 Logout", use_container_width=True):
-                st.session_state.pop("password_correct", None)
-                st.session_state.pop("username_logged_in", None)
-                st.rerun()
 
-
-    if input_mode == "💬 Single Objection":
+    if input_mode == "Single Objection 💬":
         # -----------------------------
         # Display Previous Messages
         # -----------------------------
@@ -174,15 +165,15 @@ def render_main():
                     # -----------------------------
                     st.markdown("""
                     <div style="
-                        background-color:#E3F2FD;
-                        padding:10px 15px;
+                        background-color:#DBEDF3;
+                        padding:8px;
                         border-radius:8px;
                         margin-top:10px;
-                        margin-bottom:15px;
+                        margin-bottom:25px;
                     ">
-                    <h3 style="margin:0; color:#0D47A1;">
+                    <h4 style="margin:0; color:#497488;">
                         📋 Complexity Assessment
-                    </h3>
+                    </h4>
                     </div>
                     """, unsafe_allow_html=True)
 
@@ -249,22 +240,22 @@ def render_main():
 
                     st.markdown("""
                     <div style="
-                        background-color:#E3F2FD;
-                        padding:10px 15px;
+                        background-color:#DBEDF3;
+                        padding:8px;
                         border-radius:8px;
                         margin-top:10px;
-                        margin-bottom:15px;
+                        margin-bottom:20px;
                     ">
-                    <h3 style="margin:0; color:#0D47A1;">
+                    <h4 style="margin:0; color:#497488;">
                         📝 Recommendation
-                    </h3>
+                    </h4>
                     </div>
                     """, unsafe_allow_html=True)
 
                     st.markdown("##### Recommended Next Steps")
                     #RFI indicator
-                    left, right = st.columns([4, 6])
-                    with left:
+                    reco_left, reco_right = st.columns([4, 6])
+                    with reco_left:
                         if recommendation["rfi_needed"]:
                             st.info("📄 Request for Information (RFI) Required")
                         else:
@@ -279,8 +270,8 @@ def render_main():
                     if recommendation["escalation_needed"]:
                         st.warning(recommendation["escalation_reason"])
                     else:
-                        left, right = st.columns([4, 6])
-                        with left:
+                        esca_left, esca_right = st.columns([4, 6])
+                        with esca_left:
                             st.success("No escalation required.")
                     # ===== CHANGED END =====
 
@@ -293,15 +284,15 @@ def render_main():
 
                         st.markdown("""
                         <div style="
-                            background-color:#E3F2FD;
-                            padding:10px 15px;
+                            background-color:#DBEDF3;
+                            padding:8px;
                             border-radius:8px;
                             margin-top:10px;
-                            margin-bottom:15px;
+                            margin-bottom:20px;
                         ">
-                        <h3 style="margin:0; color:#0D47A1;">
+                        <h4 style="margin:0; color:#497488;">
                             📂 Similar Past Cases
-                        </h3>
+                        </h4>
                         </div>
                         """, unsafe_allow_html=True)
 
@@ -347,7 +338,7 @@ def render_main():
                     "content": prompt.replace("$", r"\$")
                 }
             )
-
+            # Display user message
             with st.chat_message("user"):
                 st.markdown(prompt.replace("$", r"\$"))
 
@@ -383,14 +374,25 @@ def render_main():
         # -----------------------------
         # Upload bulk objections
         # -----------------------------
-        st.markdown("##### Objection File Upload")
+        st.markdown(
+            """
+            <style>
+            .stFileUploader label p  {
+                font-size: 18px;
+                font-weight: 600;
+                color: #39505C;
+                margin-bottom: 10px;
+            }
+            </style>
+            """, unsafe_allow_html=True
+        )
 
-        left, right = st.columns([2.5, 7.5])
-        with left:
+        upload_left, upload_right = st.columns([2.5, 7.5])
+        with upload_left:
             uploaded_file = st.file_uploader(
-                label="",
+                label="Objection File Upload",
                 type=["csv", "xlsx"],
-                label_visibility="collapsed",
+                label_visibility="visible",
                 help="Upload a CSV or Excel file containing property objections."
             )
             st.caption("Ensure file has required column: 'ExplanatoryNote'")
@@ -406,25 +408,25 @@ def render_main():
 
             # Validate required column
             if "ExplanatoryNote" not in df.columns:
-                left, right = st.columns([2.8, 7.2])
-                with left:
+                upload_error_left, upload_error_right = st.columns([2.8, 7.2])
+                with upload_error_left:
                     st.error("Invalid file. The file must contain an 'ExplanatoryNote' column.")
 
             else:
-                left, right = st.columns([2.8, 7.2])
-                with left:
+                upload_success_left, upload_success_right = st.columns([2.5, 7.5])
+                with upload_success_left:
                     st.success(f"{uploaded_file.name} uploaded successfully")
 
-                st.caption(f"{len(df)} objections found.")
+                st.caption(f"**{len(df)}** objections found.")
 
                 # Only appears if validation passes
-                left, center, right = st.columns([3, 4, 3])
-                with center:
+                _, process_center, _ = st.columns([4, 2, 4])
+                with process_center:
                     process_clicked = st.button("🔍 Process Objections", use_container_width=True, type='primary')
 
-                if process_clicked:
-                    left, center, right = st.columns([2, 6, 2])
-                    with center:
+                _, bulk_results_center, _ = st.columns([2, 6, 2])
+                with bulk_results_center:
+                    if process_clicked:
                         progress = st.progress(0)
                         status = st.empty()
 
@@ -459,26 +461,30 @@ def render_main():
 
                         status.success(f"Completed {len(results)} objections.")
 
-                        # -----------------------------
-                        # Display Bulk Assessment Summary
-                        # -----------------------------
+                        # Save results so they survive reruns
+                        st.session_state.batch_results = results
+
+                    # -----------------------------
+                    # Display Bulk Assessment Summary
+                    # -----------------------------
+                    if st.session_state.batch_results:
                         st.markdown("""
                         <div style="
-                            background-color:#E3F2FD;
-                            padding:10px 15px;
+                            background-color:#DBEDF3;
+                            padding:8px;
                             border-radius:8px;
-                            margin-top:10px;
-                            margin-bottom:15px;
+                            margin-top:20px;
+                            margin-bottom:25px;
                         ">
-                        <h3 style="margin:0; color:#0D47A1;">
+                        <h4 style="margin:0; color:#497488; text-align:center">
                             Assessment Summary
-                        </h3>
+                        </h4>
                         </div>
                         """, unsafe_allow_html=True)
 
                         easy_disallow, easy_rfi, medium_rfi, difficult =  0, 0, 0, 0
 
-                        for assessment in results:
+                        for assessment in st.session_state.batch_results:
 
                             complexity = assessment["classification"]["complexity"]
 
