@@ -22,7 +22,7 @@ from utils.build_past_obj_vectordb import build_past_case_vectordb
 # -----------------------------
 st.set_page_config(
         page_title="Objection Assistant",
-        page_icon="🏡",
+        page_icon="assets/app_icon.png",
         layout="wide"
     )
 
