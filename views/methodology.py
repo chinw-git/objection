@@ -114,13 +114,13 @@ def render_methodology():
                 </p>
                 <p>
                 <b>Document processing</b><br>
-                PTA content is divided into semantically meaningful chunks using <u>SemanticChunker</u>, 
+                PTA content is divided into semantically meaningful chunks using <code>SemanticChunker</code>, 
                 allowing related provisions to remain together and improving the retrieval of relevant legislative context.
                 </p>
                 <p>
-                <b>Retrieval</b><br>
-                The processed PTA chunks are stored in a legislation vector store. <br>
-                The <b>top 5</b> most relevant provisions are retrieved using <u>MultiQueryRetriever</u>, which generates multiple variations of the objection to
+                <b>Storage & Retrieval</b><br>
+                The processed PTA chunks are embedded using <code>text-embedding-3-small</code> and stored in a 'legislation' <code>Chroma</code> vector store. <br>
+                The <b>top 5</b> most relevant provisions are retrieved using <code>MultiQueryRetriever</code>, which generates multiple variations of the objection to
                 capture different ways the same issue may be expressed, improving retrieval of relevant PTA provisions.
                 </p>
         <h5>📂 <u>Past Objection Cases</u></h5>
@@ -134,8 +134,8 @@ def render_methodology():
                 complete objection text and its context for retrieval as a reference.
                 </p>
                 <p>
-                <b>Retrieval</b><br>
-                Each past objection document is stored in a 'past cases' vector store. <br>
+                <b>Storage & Retrieval</b><br>
+                Each past objection document is embedded using <code>text-embedding-3-small</code> and stored in a 'past cases' <code>Chroma</code>vector store. <br>
                 Similar past cases are identified based on their semantic similarity to the submitted objection, with the <b>top 5</b> most similar cases retrieved as references.
                 </p>
         </div>

@@ -30,7 +30,7 @@ def render_about():
     * Streamline initial case assessment by bringing relevant information together in one place.
 
     ---
-
+    
     #### Disclaimer
 
     This application is developed solely as a **proof-of-concept prototype** and is **not intended for operational use**. The outputs generated should not be relied upon for legal, financial, or official decision-making and should always be reviewed by qualified officers.
