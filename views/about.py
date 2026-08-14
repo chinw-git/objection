@@ -31,6 +31,34 @@ def render_about():
 
     ---
 
+    ### Data Sources
+
+    **<u>Property Tax Act (PTA)</u>** <br>
+    The full text of the Property Tax Act is sourced from the official [Singapore Statutes Online](https://sso.agc.gov.sg//Act/PTA1960) in PDF format and serves as the legislative knowledge base for the application.
+
+    **<u>Past Objection Cases</u>** <br>
+    A set of 53 synthetic objection cases was created for the purpose of this prototype.
+    
+    ---
+
+    ### Key Features
+    
+    1. **Flexible Input Modes** - users can toggle between _Single Objection_ and _Batch Upload_ mode.
+        * _Single Objection_ allows users to input their objection text in a chat-like interface.
+        * _Batch Upload_ allows users to upload multiple objection texts via a CSV or Excel file. <br>
+        
+    2. **Structured Assessment Results**<br> 
+        Each objection is assessed and presented as a structured output comprising the complexity classification, relevant PTA provisions, recommended next steps, and similar past cases.
+        In batch mode, a high-level summary of complexity level distribution is displayed instead, with full details available via export.
+        
+    3. **Assessment Export**<br> 
+        Assessment results can be downloaded via the 'Export Assessment' button at the sidebar, covering all objections assessed in the current session.
+
+    4. **Model Settings**<br>
+        GPT model and temperature can be adjusted via the sidebar to customise the assistant's behaviour.
+
+    ---
+
     #### Disclaimer
 
     This application is developed solely as a **proof-of-concept prototype** and is **not intended for operational use**. The outputs generated should not be relied upon for legal, financial, or official decision-making and should always be reviewed by qualified officers.
@@ -42,4 +70,4 @@ def render_about():
 
     **Members:** New Chin Wen, Wesley Teo
 
-    """)
+    """, unsafe_allow_html=True)
