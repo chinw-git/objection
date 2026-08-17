@@ -59,6 +59,15 @@ def check_password():
             margin-right: auto;
             width: 80%;
         }
+
+        div[data-testid="stButton"] {
+            display: flex;
+            justify-content: center;
+        }
+
+        div[data-testid="stButton"] button {
+            width: 100px !important;
+        }
     </style>
     """, unsafe_allow_html=True)
 
@@ -93,14 +102,14 @@ def check_password():
         )
 
         # centralise the Login button
-        button_left, button_center, button_right = st.columns([3, 2, 3])
-        with button_center:
-            st.button(
-                "Login",
-                type="primary",
-                on_click=password_entered,
-                use_container_width=True
-            )
+        # button_left, button_center, button_right = st.columns([3, 2, 3])
+        # with button_center:
+        st.button(
+            "Login",
+            type="primary",
+            on_click=password_entered,
+            use_container_width=True
+        )
 
         if "password_correct" in st.session_state:
             st.error("😕 Incorrect username or password")
